@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tracker CarSat - <%= pageTitle %></title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            primary: '#4f46e5', // Azul principal da Tracker CarSat
+            secondary: '#6b7280', // Cinza para texto
+            accent: '#10b981', // Verde de destaque
+            warning: '#f59e0b', // Laranja de aviso
+            danger: '#ef4444', // Vermelho de perigo
+          }
+        }
+      }
+    }
+  </script>
+  <!-- CSS Personalizado para ajustes e responsividade das tabelas -->
+  <link rel="stylesheet" href="/css/style.css">
+  <!-- REMOVIDO: Moment.js e Moment-Duration-Format CDN -->
+</head>
+<body class="bg-gray-100 font-sans text-gray-800 flex">
+
+  <!-- Sidebar de Navegação -->
+  <aside class="w-64 bg-gray-900 text-white flex flex-col p-4 shadow-lg fixed h-full z-10 md:static transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out" id="sidebar">
+    <div class="text-xl font-bold mb-8 text-center border-b border-gray-700 pb-4">
+      Tracker CarSat
+    </div>
+    <nav class="flex-grow">
+      <ul>
+        <li class="mb-2">
+          <a href="/" class="flex items-center px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">
+            <span class="mr-3">📊</span> Dashboard
+          </a>
+        </li>
+        <li class="mb-2">
+          <a href="/atendimentos-ativos" class="flex items-center px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">
+            <span class="mr-3">📞</span> Atendimentos Ativos
+          </a>
+        </li>
+        <li class="mb-2">
+          <a href="/historico-atendimentos" class="flex items-center px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">
+            <span class="mr-3">📜</span> Histórico de Atendimentos
+          </a>
+        </li>
+        <li class="mb-2">
+          <a href="/todas-mensagens" class="flex items-center px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">
+            <span class="mr-3">💬</span> Todas as Mensagens
+          </a>
+        </li>
+        <li class="mb-2">
+          <a href="/todos-eventos" class="flex items-center px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">
+            <span class="mr-3">🔔</span> Todos os Eventos
+          </a>
+        </li>
+        <li class="mb-2">
+          <a href="/avaliacoes" class="flex items-center px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">
+            <span class="mr-3">⭐</span> Avaliações
+          </a>
+        </li>
+        <li class="mb-2">
+          <a href="/tarefas-pendentes" class="flex items-center px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">
+            <span class="mr-3">📝</span> Tarefas Pendentes
+          </a>
+        </li>
+        <li class="mb-2">
+          <a href="/gerenciar-atendentes" class="flex items-center px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">
+            <span class="mr-3">👥</span> Gerenciar Atendentes
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <div class="mt-auto text-gray-500 text-sm text-center">
+      &copy; <%= new Date().getFullYear() %> Tracker CarSat
+    </div>
+  </aside>
+
+  <!-- Main Content Wrapper -->
+  <div class="flex-1 flex flex-col min-h-screen relative md:ml-64">
+    <!-- Navbar (for mobile toggle) -->
+    <nav class="bg-white p-4 shadow-md md:hidden flex justify-between items-center">
+      <button id="sidebarToggle" class="text-gray-600 focus:outline-none">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+      </button>
+      <h2 class="text-xl font-semibold text-gray-800"><%= pageTitle %></h2>
+    </nav>
+
+    <!-- Main Content Area (where individual pages are injected) -->
+    <main class="p-6 flex-1">
+      <section class="mb-8 p-6 bg-white rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300">
+          <h2 class="text-2xl font-semibold text-gray-800 border-b-2 border-primary pb-2 mb-6">Histórico de Atendimentos</h2>
+          
+          <!-- NOVO: Filtro por Atendente -->
+          <div class="mb-6 flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4">
+              <label for="attendantFilter" class="block text-lg font-medium text-gray-700">Filtrar por Atendente:</label>
+              <select id="attendantFilter" 
+                      class="mt-1 block w-full md:w-auto px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm">
+                  <option value="">Todos os Atendentes</option>
+                  <% 
+                    // Garante que todosAtendentes existe e é um array
+                    if (todosAtendentes && Array.isArray(todosAtendentes)) { 
+                      todosAtendentes.forEach(attendant => { 
+                  %>
+                      <option value="<%= attendant.jid %>" 
+                              <%= selectedAtendenteJid === attendant.jid ? 'selected' : '' %>>
+                          <%= attendant.nome %> (<%= cleanJid(attendant.jid) %>)
+                      </option>
+                  <% 
+                      });
+                    } 
+                  %>
+              </select>
+          </div>
+
+          <% if (historico.length > 0) { %>
+              <div class="overflow-x-auto rounded-lg shadow-sm border border-gray-200">
+                  <table class="min-w-full bg-white table-auto text-sm table-responsive">
+                      <thead class="bg-primary text-white">
+                          <tr>
+                              <th class="py-3 px-4 text-left">ID</th>
+                              <th class="py-3 px-4 text-left">Cliente</th>
+                              <th class="py-3 px-4 text-left">Setor</th>
+                              <th class="py-3 px-4 text-left">Atendente</th>
+                              <th class="py-3 px-4 text-left">Início</th>
+                              <th class="py-3 px-4 text-left">Fim</th>
+                              <th class="py-3 px-4 text-left">Duração</th>
+                              <th class="py-3 px-4 text-left">Ações</th>
+                          </tr>
+                      </thead>
+                      <tbody class="divide-y divide-gray-200">
+                          <% historico.forEach(item => { %>
+                              <tr>
+                                  <td class="py-3 px-4" data-label-1="ID"><%= item.id %></td>
+                                  <td class="py-3 px-4" data-label-2="Cliente"><%= cleanJid(item.jid) %></td>
+                                  <td class="py-3 px-4" data-label-3="Setor"><%= setores[item.setor] || 'N/A' %></td>
+                                  <td class="py-3 px-4" data-label-4="Atendente"><%= item.atendente ? cleanJid(item.atendente) + ' (' + (todosAtendentes.find(a => a.jid === item.atendente)?.nome || 'Desconhecido') + ')' : 'N/A' %></td>
+                                  <td class="py-3 px-4" data-label-5="Início"><%= formatDate(item.inicio) %></td>
+                                  <td class="py-3 px-4" data-label-6="Fim"><%= item.fim ? formatDate(item.fim) : 'Ativo' %></td>
+                                  <td class="py-3 px-4" data-label-7="Duração">
+                                      <!-- AGORA USA A PROPRIEDADE JÁ CALCULADA NO SERVIDOR -->
+                                      <%= item.durationHumanized %>
+                                  </td>
+                                  <td class="py-3 px-4" data-label-8="Ações">
+                                      <a href="/atendimento/<%= item.id %>" class="text-primary hover:underline font-semibold">Ver Chat</a>
+                                  </td>
+                              </tr>
+                          <% }); %>
+                      </tbody>
+                  </table>
+              </div>
+          <% } else { %>
+              <p class="text-gray-600">Nenhum atendimento no histórico com o filtro selecionado.</p>
+          <% } %>
+      </section>
+
+      <script>
+        document.getElementById('sidebarToggle').addEventListener('click', function() {
+          const sidebar = document.getElementById('sidebar');
+          sidebar.classList.toggle('-translate-x-full');
+        });
+
+        // Lógica para o filtro de atendentes
+        document.getElementById('attendantFilter').addEventListener('change', function() {
+            const selectedJid = this.value;
+            let url = '/historico-atendimentos';
+            if (selectedJid) {
+                url += `?atendenteJid=${selectedJid}`;
+            }
+            window.location.href = url; // Redireciona para a URL com o filtro
+        });
+      </script>
+    </main>
+  </div>
+</body>
+</html>

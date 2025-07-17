@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tracker CarSat - <%= pageTitle %></title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#4f46e5', // Azul principal da Tracker CarSat
+                        secondary: '#6b7280', // Cinza para texto
+                        accent: '#10b981', // Verde de destaque
+                        warning: '#f59e0b', // Laranja de aviso
+                        danger: '#ef4444', // Vermelho de perigo
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- CSS Personalizado para ajustes e responsividade das tabelas e CHAT -->
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="bg-gray-100 font-sans text-gray-800 flex">
+
+    <!-- Sidebar de Navegação -->
+    <aside class="w-64 bg-gray-900 text-white flex flex-col p-4 shadow-lg fixed h-full z-10 md:static transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out" id="sidebar">
+        <div class="text-xl font-bold mb-8 text-center border-b border-gray-700 pb-4">
+            Tracker CarSat
+        </div>
+        <nav class="flex-grow">
+            <ul>
+                <li class="mb-2">
+                    <a href="/" class="flex items-center px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200 <%= pageTitle === 'Dashboard' ? 'bg-gray-700 text-white' : '' %>">
+                        <span class="mr-3">📊</span> Dashboard
+                    </a>
+                </li>
+                <li class="mb-2">
+                    <a href="/atendimentos-ativos" class="flex items-center px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200 <%= pageTitle === 'Atendimentos Ativos' ? 'bg-gray-700 text-white' : '' %>">
+                        <span class="mr-3">📞</span> Atendimentos Ativos
+                    </a>
+                </li>
+                <li class="mb-2">
+                    <a href="/historico-atendimentos" class="flex items-center px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200 <%= pageTitle === 'Histórico de Atendimentos' ? 'bg-gray-700 text-white' : '' %>">
+                        <span class="mr-3">📜</span> Histórico de Atendimentos
+                    </a>
+                </li>
+                <li class="mb-2">
+                    <a href="/todas-mensagens" class="flex items-center px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200 <%= pageTitle === 'Todas as Mensagens' ? 'bg-gray-700 text-white' : '' %>">
+                        <span class="mr-3">💬</span> Todas as Mensagens
+                    </a>
+                </li>
+                <li class="mb-2">
+                    <a href="/todos-eventos" class="flex items-center px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200 <%= pageTitle === 'Todos os Eventos' ? 'bg-gray-700 text-white' : '' %>">
+                        <span class="mr-3">🔔</span> Todos os Eventos
+                    </a>
+                </li>
+                <li class="mb-2">
+                    <a href="/avaliacoes" class="flex items-center px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200 <%= pageTitle === 'Avaliações' ? 'bg-gray-700 text-white' : '' %>">
+                        <span class="mr-3">⭐</span> Avaliações
+                    </a>
+                </li>
+                <li class="mb-2">
+                    <a href="/tarefas-pendentes" class="flex items-center px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200 <%= pageTitle === 'Tarefas Pendentes' ? 'bg-gray-700 text-white' : '' %>">
+                        <span class="mr-3">📝</span> Tarefas Pendentes
+                    </a>
+                </li>
+                <li class="mb-2">
+                    <a href="/gerenciar-atendentes" class="flex items-center px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200 <%= pageTitle === 'Gerenciar Atendentes' ? 'bg-gray-700 text-white' : '' %>">
+                        <span class="mr-3">👥</span> Gerenciar Atendentes
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <div class="mt-auto text-gray-500 text-sm text-center">
+            &copy; <%= new Date().getFullYear() %> Tracker CarSat
+        </div>
+    </aside>
+
+    <!-- Main Content Wrapper -->
+    <div class="flex-1 flex flex-col min-h-screen relative md:ml-64">
+        <!-- Navbar (for mobile toggle) -->
+        <nav class="bg-white p-4 shadow-md md:hidden flex justify-between items-center">
+            <button id="sidebarToggle" class="text-gray-600 focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+            <h2 class="text-xl font-semibold text-gray-800"><%= pageTitle %></h2>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="p-6 flex-1">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6 border-b-2 border-primary pb-2">Dashboard Geral</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                <!-- Card 1: Total de Atendimentos Hoje -->
+                <div class="bg-white p-6 rounded-lg shadow-md flex items-center justify-between transition-transform transform hover:scale-105">
+                    <div>
+                        <p class="text-sm font-medium text-gray-500">Atendimentos Hoje</p>
+                        <p class="text-3xl font-bold text-primary mt-1"><%= totalAtendimentosHoje %></p>
+                    </div>
+                    <div class="bg-primary-100 p-3 rounded-full">
+                        <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.11C2.604 14.651 2 12.555 2 10c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                    </div>
+                </div>
+
+                <!-- Card 2: Avaliação Média -->
+                <div class="bg-white p-6 rounded-lg shadow-md flex items-center justify-between transition-transform transform hover:scale-105">
+                    <div>
+                        <p class="text-sm font-medium text-gray-500">Avaliação Média</p>
+                        <p class="text-3xl font-bold text-accent mt-1"><%= avaliacaoMedia %> ⭐</p>
+                    </div>
+                    <div class="bg-accent-100 p-3 rounded-full">
+                        <svg class="w-8 h-8 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.324 1.144l1.519 4.674c.3.921-.755 1.688-1.539 1.145l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.543-1.838-.224-1.539-1.145l1.519-4.674a1 1 0 00-.324-1.144L2.492 9.091c-.783-.57-.381-1.81.588-1.81h4.915a1 1 0 00.95-.69l1.519-4.674z"></path></svg>
+                    </div>
+                </div>
+
+                <!-- Card 3: Atendentes Ocupados -->
+                <div class="bg-white p-6 rounded-lg shadow-md flex items-center justify-between transition-transform transform hover:scale-105">
+                    <div>
+                        <p class="text-sm font-medium text-gray-500">Atendentes Ocupados</p>
+                        <p class="text-3xl font-bold text-danger mt-1"><%= atendentesOcupados.length %></p>
+                    </div>
+                    <div class="bg-danger-100 p-3 rounded-full">
+                        <svg class="w-8 h-8 text-danger" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M10 20v-2a3 3 0 013-3h4a3 3 0 013 3v2m-2-7h-4m2 0h4m-9-2a7 7 0 00-7 7v2a4 4 0 004 4h14a4 4 0 004-4v-2a7 7 0 00-7-7h-2.5C10 9 9 9.5 9 10z"></path></svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção de Atendimentos Ativos (resumo) -->
+            <section class="mb-8 p-6 bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <h3 class="text-xl font-semibold text-gray-800 border-b border-gray-200 pb-3 mb-4 flex items-center justify-between">
+                    Atendimentos Ativos
+                    <a href="/atendimentos-ativos" class="text-primary text-sm hover:underline">Ver Todos</a>
+                </h3>
+                <% if (atendidos.length > 0) { %>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cliente</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Setor</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Atendente</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Início</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <% atendidos.slice(0, 5).forEach(atendimento => { %>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= cleanJid(atendimento.jid) %></td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= setores[atendimento.setor]?.nome || 'Desconhecido' %></td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            <% if (atendimento.atendente) { %>
+                                                <%= (atendentes.find(a => a.jid === atendimento.atendente)?.nome || cleanJid(atendimento.atendente)) %>
+                                            <% } else { %>
+                                                Na Fila
+                                            <% } %>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= formatDate(atendimento.ultimaInteracao) %></td>
+                                    </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                <% } else { %>
+                    <p class="text-gray-600 text-center py-4">Nenhum atendimento ativo no momento.</p>
+                <% } %>
+            </section>
+
+            <!-- Seção de Filas de Espera -->
+            <section class="mb-8 p-6 bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <h3 class="text-xl font-semibold text-gray-800 border-b border-gray-200 pb-3 mb-4">Filas de Espera por Setor</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <% for (const setorId in filas) { %>
+                        <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                            <h4 class="font-semibold text-lg text-primary mb-2"><%= setores[setorId]?.nome || 'Setor Desconhecido' %></h4>
+                            <% if (filas[setorId].length > 0) { %>
+                                <p class="text-gray-700">Pessoas na fila: <span class="font-bold text-warning"><%= filas[setorId].length %></span></p>
+                                <ul class="list-disc list-inside mt-2 text-sm text-gray-600">
+                                    <% filas[setorId].forEach((jid, index) => { %>
+                                        <li>#<%= index + 1 %>: <%= cleanJid(jid) %></li>
+                                    <% }); %>
+                                </ul>
+                            <% } else { %>
+                                <p class="text-gray-600 italic">Fila vazia. 🎉</p>
+                            <% } %>
+                        </div>
+                    <% } %>
+                </div>
+            </section>
+
+            <!-- Seção de Mensagens Recentes -->
+            <section class="mb-8 p-6 bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <h3 class="text-xl font-semibold text-gray-800 border-b border-gray-200 pb-3 mb-4 flex items-center justify-between">
+                    Mensagens Recentes
+                    <a href="/todas-mensagens" class="text-primary text-sm hover:underline">Ver Todas</a>
+                </h3>
+                <% if (mensagens.length > 0) { %>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">JID</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Direção</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mensagem</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Data/Hora</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <% mensagens.forEach(msg => { %>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= cleanJid(msg.jid) %></td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= msg.direcao === 'entrada' ? 'Entrada' : 'Saída' %></td>
+                                        <td class="px-6 py-4 text-sm text-gray-500 truncate max-w-xs"><%= msg.mensagem || '[Mídia]' %></td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= formatDate(msg.timestamp) %></td>
+                                    </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                <% } else { %>
+                    <p class="text-gray-600 text-center py-4">Nenhuma mensagem recente.</p>
+                <% } %>
+            </section>
+
+            <!-- Seção de Eventos Recentes -->
+            <section class="mb-8 p-6 bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <h3 class="text-xl font-semibold text-gray-800 border-b border-gray-200 pb-3 mb-4 flex items-center justify-between">
+                    Eventos Recentes
+                    <a href="/todos-eventos" class="text-primary text-sm hover:underline">Ver Todos</a>
+                </h3>
+                <% if (eventos.length > 0) { %>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tipo</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">JID</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Detalhes</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Data/Hora</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <% eventos.forEach(event => { %>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= event.tipo.replace(/_/g, ' ') %></td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= cleanJid(event.jid) %></td>
+                                        <td class="px-6 py-4 text-sm text-gray-500 truncate max-w-xs"><%= event.detalhes || 'N/A' %></td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= formatDate(event.timestamp) %></td>
+                                    </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                <% } else { %>
+                    <p class="text-gray-600 text-center py-4">Nenhum evento recente.</p>
+                <% } %>
+            </section>
+
+            <!-- Seção de Avaliações Recentes -->
+            <section class="mb-8 p-6 bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <h3 class="text-xl font-semibold text-gray-800 border-b border-gray-200 pb-3 mb-4 flex items-center justify-between">
+                    Avaliações Recentes
+                    <a href="/avaliacoes" class="text-primary text-sm hover:underline">Ver Todas</a>
+                </h3>
+                <% if (avaliacoes.length > 0) { %>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cliente</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Atendente</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Setor</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nota</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Data/Hora</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <% avaliacoes.forEach(avaliacao => { %>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= cleanJid(avaliacao.jid) %></td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= cleanJid(avaliacao.atendente) %></td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= setores[avaliacao.setor]?.nome || 'Desconhecido' %></td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= avaliacao.nota %> ⭐</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= formatDate(avaliacao.timestamp) %></td>
+                                    </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                <% } else { %>
+                    <p class="text-gray-600 text-center py-4">Nenhuma avaliação recente.</p>
+                <% } %>
+            </section>
+
+            <!-- Seção de Tarefas Pendentes -->
+            <section class="mb-8 p-6 bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <h3 class="text-xl font-semibold text-gray-800 border-b border-gray-200 pb-3 mb-4 flex items-center justify-between">
+                    Tarefas Pendentes
+                    <a href="/tarefas-pendentes" class="text-primary text-sm hover:underline">Ver Todas</a>
+                </h3>
+                <% if (tarefasPendentes.length > 0) { %>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">JID</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ação</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Agendado Para</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <% tarefasPendentes.forEach(tarefa => { %>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= cleanJid(tarefa.jid) %></td>
+                                        <td class="px-6 py-4 text-sm text-gray-500 truncate max-w-xs"><%= tarefa.acao %></td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= formatDate(tarefa.agendadoPara) %></td>
+                                    </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                <% } else { %>
+                    <p class="text-gray-600 text-center py-4">Nenhuma tarefa pendente. 🎉</p>
+                <% } %>
+            </section>
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-gray-800 text-white text-center p-4 mt-auto">
+            <p>&copy; <%= new Date().getFullYear() %> Tracker CarSat. Todos os direitos reservados.</p>
+        </footer>
+    </div>
+
+    <script>
+        document.getElementById('sidebarToggle').addEventListener('click', function() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('-translate-x-full');
+        });
+    </script>
+</body>
+</html>

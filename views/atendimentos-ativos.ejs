@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tracker CarSat - <%= pageTitle %></title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            primary: '#4f46e5', // Azul principal da Tracker CarSat
+            secondary: '#6b7280', // Cinza para texto
+            accent: '#10b981', // Verde de destaque
+            warning: '#f59e0b', // Laranja de aviso
+            danger: '#ef4444', // Vermelho de perigo
+          }
+        }
+      }
+    }
+  </script>
+  <!-- CSS Personalizado para ajustes e responsividade das tabelas -->
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="bg-gray-100 font-sans text-gray-800 flex">
+
+  <!-- Sidebar de Navegação -->
+  <aside class="w-64 bg-gray-900 text-white flex flex-col p-4 shadow-lg fixed h-full z-10 md:static transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out" id="sidebar">
+    <div class="text-xl font-bold mb-8 text-center border-b border-gray-700 pb-4">
+      Tracker CarSat
+    </div>
+    <nav class="flex-grow">
+      <ul>
+        <li class="mb-2">
+          <a href="/" class="flex items-center px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">
+            <span class="mr-3">📊</span> Dashboard
+          </a>
+        </li>
+        <li class="mb-2">
+          <a href="/atendimentos-ativos" class="flex items-center px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">
+            <span class="mr-3">📞</span> Atendimentos Ativos
+          </a>
+        </li>
+        <li class="mb-2">
+          <a href="/historico-atendimentos" class="flex items-center px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">
+            <span class="mr-3">📜</span> Histórico de Atendimentos
+          </a>
+        </li>
+        <li class="mb-2">
+          <a href="/todas-mensagens" class="flex items-center px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">
+            <span class="mr-3">💬</span> Todas as Mensagens
+          </a>
+        </li>
+        <li class="mb-2">
+          <a href="/todos-eventos" class="flex items-center px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">
+            <span class="mr-3">🔔</span> Todos os Eventos
+          </a>
+        </li>
+        <li class="mb-2">
+          <a href="/avaliacoes" class="flex items-center px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">
+            <span class="mr-3">⭐</span> Avaliações
+          </a>
+        </li>
+        <li class="mb-2">
+          <a href="/tarefas-pendentes" class="flex items-center px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">
+            <span class="mr-3">📝</span> Tarefas Pendentes
+          </a>
+        </li>
+        <!-- NOVO LINK AQUI -->
+        <li class="mb-2">
+          <a href="/gerenciar-atendentes" class="flex items-center px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">
+            <span class="mr-3">👥</span> Gerenciar Atendentes
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <div class="mt-auto text-gray-500 text-sm text-center">
+      &copy; <%= new Date().getFullYear() %> Tracker CarSat
+    </div>
+  </aside>
+
+  <!-- Main Content Wrapper -->
+  <div class="flex-1 flex flex-col min-h-screen relative md:ml-64">
+    <!-- Navbar (for mobile toggle) -->
+    <nav class="bg-white p-4 shadow-md md:hidden flex justify-between items-center">
+      <button id="sidebarToggle" class="text-gray-600 focus:outline-none">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+      </button>
+      <h2 class="text-xl font-semibold text-gray-800"><%= pageTitle %></h2>
+    </nav>
+
+    <!-- Main Content Area (where individual pages are injected) -->
+    <main class="p-6 flex-1">
+      <% for (let setorId in setores) { %>
+        <section class="mb-8 p-6 bg-white rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300">
+          <h2 class="text-2xl font-semibold text-gray-800 border-b-2 border-primary pb-2 mb-6">Setor: <%= setores[setorId] %></h2>
+
+          <!-- Fila de Espera -->
+          <h3 class="text-xl font-semibold text-gray-700 mb-4">Fila de Espera (<%= filas[setorId].length %> na fila)</h3>
+          <% if (filas[setorId].length > 0) { %>
+            <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 max-h-48 overflow-y-auto mb-6">
+              <ul class="list-disc list-inside text-gray-700">
+                <% filas[setorId].forEach(jid => { %>
+                  <li class="py-1 border-b border-gray-100 last:border-b-0"><%= cleanJid(jid) %></li>
+                <% }) %>
+              </ul>
+            </div>
+          <% } else { %>
+            <p class="text-gray-600 mb-6">Fila vazia para este setor. 🎉</p>
+          <% } %>
+
+          <!-- Atendentes do Setor -->
+          <h3 class="text-xl font-semibold text-gray-700 mb-4">Atendentes do Setor</h3>
+          <div class="overflow-x-auto rounded-lg shadow-sm border border-gray-200">
+            <table class="min-w-full bg-white table-auto text-sm table-responsive">
+              <thead class="bg-primary text-white">
+                <tr>
+                  <th class="py-3 px-4 text-left">JID</th>
+                  <th class="py-3 px-4 text-left">Nome</th>
+                  <th class="py-3 px-4 text-left">Setor</th>
+                  <th class="py-3 px-4 text-left">Status</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-200">
+                <% atendentes
+                    .filter(a => a.setor === setorId) // Filtra atendentes apenas para este setor
+                    .forEach(a => { %>
+                  <tr>
+                    <td class="py-3 px-4" data-label-1="JID"><%= cleanJid(a.jid) %></td>
+                    <td class="py-3 px-4" data-label-2="Nome"><%= a.nome %></td>
+                    <td class="py-3 px-4" data-label-3="Setor"><%= setores[a.setor] || 'N/A' %></td>
+                    <td class="py-3 px-4" data-label-4="Status">
+                      <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold
+                                    <%= a.ocupado ? 'bg-danger-100 text-danger-800' : 'bg-accent-100 text-accent-800' %>">
+                        <%= a.ocupado ? 'Ocupado' : 'Disponível' %>
+                      </span>
+                    </td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      <% } %>
+
+      <section class="mb-8 p-6 bg-white rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300">
+        <h2 class="text-2xl font-semibold text-gray-800 border-b-2 border-primary pb-2 mb-6">Clientes em Atendimento Ativo</h2>
+        <% if (atendidosAtualmente.length > 0) { %>
+          <div class="overflow-x-auto rounded-lg shadow-sm border border-gray-200">
+            <table class="min-w-full bg-white table-auto text-sm table-responsive">
+              <thead class="bg-primary text-white">
+                <tr>
+                  <th class="py-3 px-4 text-left">Cliente JID</th>
+                  <th class="py-3 px-4 text-left">Setor</th>
+                  <th class="py-3 px-4 text-left">Atendente JID</th>
+                  <th class="py-3 px-4 text-left">Etapa</th>
+                  <th class="py-3 px-4 text-left">Última Interação</th>
+                  <th class="py-3 px-4 text-left">Avaliação Pend.</th>
+                  <th class="py-3 px-4 text-left">Ações</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-200">
+                <% atendidosAtualmente.forEach(cli => { %>
+                  <tr>
+                    <td class="py-3 px-4" data-label-1="Cliente JID"><%= cleanJid(cli.jid) %></td>
+                    <td class="py-3 px-4" data-label-2="Setor"><%= setores[cli.setor] || 'N/A' %></td>
+                    <td class="py-3 px-4" data-label-3="Atendente JID"><%= cleanJid(cli.atendente) || '-' %></td>
+                    <td class="py-3 px-4" data-label-4="Etapa"><%= cli.etapa %></td>
+                    <td class="py-3 px-4" data-label-5="Última Interação"><%= formatDate(cli.ultimaInteracao) %></td>
+                    <td class="py-3 px-4" data-label-6="Avaliação Pend.">
+                      <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold
+                                    <%= cli.avaliacaoPendente ? 'bg-orange-100 text-orange-800' : 'bg-gray-100 text-gray-700' %>">
+                        <%= cli.avaliacaoPendente ? 'Sim' : 'Não' %>
+                      </span>
+                    </td>
+                    <td class="py-3 px-4" data-label-7="Ações">
+                      <% if (cli.atendente) { %>
+                        <a href="/atendimento/<%= cli.historicoId %>" class="text-primary hover:underline font-semibold">Ver Chat</a>
+                      <% } else { %>
+                        <span class="text-gray-500 italic">Na fila</span>
+                      <% } %>
+                    </td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        <% } else { %>
+          <p class="text-gray-600">Nenhum cliente em atendimento ativo no momento.</p>
+        <% } %>
+      </section>
+
+      <script>
+        document.getElementById('sidebarToggle').addEventListener('click', function() {
+          const sidebar = document.getElementById('sidebar');
+          sidebar.classList.toggle('-translate-x-full');
+        });
+      </script>
+    </main>
+  </div>
+</body>
+</html>

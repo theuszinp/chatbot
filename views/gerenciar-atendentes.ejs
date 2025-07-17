@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tracker CarSat - <%= pageTitle %></title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            primary: '#4f46e5', // Azul principal da Tracker CarSat
+            secondary: '#6b7280', // Cinza para texto
+            accent: '#10b981', // Verde de destaque
+            warning: '#f59e0b', // Laranja de aviso
+            danger: '#ef4444', // Vermelho de perigo
+          }
+        }
+      }
+    }
+  </script>
+  <!-- CSS Personalizado para ajustes e responsividade das tabelas -->
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="bg-gray-100 font-sans text-gray-800 flex">
+
+  <!-- Sidebar de Navegação -->
+  <aside class="w-64 bg-gray-900 text-white flex flex-col p-4 shadow-lg fixed h-full z-10 md:static transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out" id="sidebar">
+    <div class="text-xl font-bold mb-8 text-center border-b border-gray-700 pb-4">
+      Tracker CarSat
+    </div>
+    <nav class="flex-grow">
+      <ul>
+        <li class="mb-2">
+          <a href="/" class="flex items-center px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">
+            <span class="mr-3">📊</span> Dashboard
+          </a>
+        </li>
+        <li class="mb-2">
+          <a href="/atendimentos-ativos" class="flex items-center px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">
+            <span class="mr-3">📞</span> Atendimentos Ativos
+          </a>
+        </li>
+        <li class="mb-2">
+          <a href="/historico-atendimentos" class="flex items-center px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">
+            <span class="mr-3">📜</span> Histórico de Atendimentos
+          </a>
+        </li>
+        <li class="mb-2">
+          <a href="/todas-mensagens" class="flex items-center px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">
+            <span class="mr-3">💬</span> Todas as Mensagens
+          </a>
+        </li>
+        <li class="mb-2">
+          <a href="/todos-eventos" class="flex items-center px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">
+            <span class="mr-3">🔔</span> Todos os Eventos
+          </a>
+        </li>
+        <li class="mb-2">
+          <a href="/avaliacoes" class="flex items-center px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">
+            <span class="mr-3">⭐</span> Avaliações
+          </a>
+        </li>
+        <li class="mb-2">
+          <a href="/tarefas-pendentes" class="flex items-center px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">
+            <span class="mr-3">📝</span> Tarefas Pendentes
+          </a>
+        </li>
+        <li class="mb-2">
+          <a href="/gerenciar-atendentes" class="flex items-center px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">
+            <span class="mr-3">👥</span> Gerenciar Atendentes
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <div class="mt-auto text-gray-500 text-sm text-center">
+      &copy; <%= new Date().getFullYear() %> Tracker CarSat
+    </div>
+  </aside>
+
+  <!-- Main Content Wrapper -->
+  <div class="flex-1 flex flex-col min-h-screen relative md:ml-64">
+    <!-- Navbar (for mobile toggle) -->
+    <nav class="bg-white p-4 shadow-md md:hidden flex justify-between items-center">
+      <button id="sidebarToggle" class="text-gray-600 focus:outline-none">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+      </button>
+      <h2 class="text-xl font-semibold text-gray-800"><%= pageTitle %></h2>
+    </nav>
+
+    <!-- Main Content Area (where individual pages are injected) -->
+    <main class="p-6 flex-1">
+      <section class="mb-8 p-6 bg-white rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300">
+        <h2 class="text-2xl font-semibold text-gray-800 border-b-2 border-primary pb-2 mb-6">Gerenciar Atendentes</h2>
+
+        <form id="addAtendenteForm" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 p-4 border rounded-lg bg-gray-50 shadow-sm">
+          <div>
+            <label for="numero" class="block text-sm font-medium text-gray-700">Número do WhatsApp (JID):</label>
+            <input type="text" id="numero" name="numero" placeholder="5571987654321@s.whatsapp.net" required
+                   class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm">
+          </div>
+          <div>
+            <label for="nome" class="block text-sm font-medium text-gray-700">Nome do Atendente:</label>
+            <input type="text" id="nome" name="nome" placeholder="João Silva" required
+                   class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm">
+          </div>
+          <div>
+            <label for="setor" class="block text-sm font-medium text-gray-700">Setor:</label>
+            <select id="setor" name="setor" required
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm">
+              <option value="">Selecione um Setor</option>
+              <option value="1">Administrativo</option>
+              <option value="2">Vendas</option>
+              <option value="3">Suporte Técnico</option>
+            </select>
+          </div>
+          <div class="md:col-span-3 flex justify-end">
+            <button type="submit"
+                    class="mt-4 px-6 py-2 bg-primary text-white font-semibold rounded-md shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200">
+              Cadastrar/Atualizar Atendente
+            </button>
+          </div>
+        </form>
+
+        <h3 class="text-xl font-semibold text-gray-800 border-b-2 border-gray-300 pb-2 mb-4">Atendentes Cadastrados</h3>
+        
+        <% if (atendentes.length > 0) { %>
+          <div class="overflow-x-auto rounded-lg shadow-sm border border-gray-200">
+            <table class="min-w-full bg-white table-auto text-sm table-responsive">
+              <thead class="bg-gray-200 text-gray-700">
+                <tr>
+                  <th class="py-3 px-4 text-left">Número (JID)</th>
+                  <th class="py-3 px-4 text-left">Nome</th>
+                  <th class="py-3 px-4 text-left">Setor</th>
+                  <th class="py-3 px-4 text-left">Status</th> <!-- NOVA COLUNA -->
+                  <th class="py-3 px-4 text-left">Ações</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-200">
+                <% atendentes.forEach(attendant => { %>
+                  <tr>
+                    <td class="py-3 px-4" data-label="Número (JID)"><%= cleanJid(attendant.jid) %></td>
+                    <td class="py-3 px-4" data-label="Nome"><%= attendant.nome %></td>
+                    <td class="py-3 px-4" data-label="Setor"><%= setores[attendant.setor] || 'N/A' %></td>
+                    <td class="py-3 px-4" data-label="Status">
+                      <!-- Toggle Switch para Status -->
+                      <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" data-jid="<%= attendant.jid %>" 
+                               <%= attendant.ocupado === 1 ? 'checked' : '' %> class="sr-only peer toggle-status">
+                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                        <span class="ml-3 text-sm font-medium text-gray-900 status-text" id="status-<%= cleanJid(attendant.jid) %>">
+                            <%= attendant.ocupado === 1 ? 'Ocupado' : 'Disponível' %>
+                        </span>
+                      </label>
+                    </td>
+                    <td class="py-3 px-4" data-label="Ações">
+                      <button data-jid="<%= attendant.jid %>"
+                              class="delete-atendente-btn px-4 py-2 bg-danger text-white font-semibold rounded-md shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors duration-200">
+                        Remover
+                      </button>
+                    </td>
+                  </tr>
+                <% }); %>
+              </tbody>
+            </table>
+          </div>
+        <% } else { %>
+          <p class="text-gray-600">Nenhum atendente cadastrado.</p>
+        <% } %>
+
+      </section>
+
+      <!-- Modal de Confirmação (para substituir alert/confirm) -->
+      <div id="confirmModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white p-6 rounded-lg shadow-xl max-w-sm w-full">
+          <h3 class="text-lg font-semibold text-gray-900 mb-4">Confirmação</h3>
+          <p id="confirmMessage" class="text-gray-700 mb-6"></p>
+          <div class="flex justify-end space-x-4">
+            <button id="cancelConfirm" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400">Cancelar</button>
+            <button id="okConfirm" class="px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-700">OK</button>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        document.getElementById('sidebarToggle').addEventListener('click', function() {
+          const sidebar = document.getElementById('sidebar');
+          sidebar.classList.toggle('-translate-x-full');
+        });
+
+        // Funções para o modal de confirmação customizado
+        let resolveConfirm;
+        function showConfirm(message) {
+            document.getElementById('confirmMessage').textContent = message;
+            document.getElementById('confirmModal').classList.remove('hidden');
+            return new Promise(resolve => {
+                resolveConfirm = resolve;
+            });
+        }
+        document.getElementById('okConfirm').addEventListener('click', () => {
+            document.getElementById('confirmModal').classList.add('hidden');
+            resolveConfirm(true);
+        });
+        document.getElementById('cancelConfirm').addEventListener('click', () => {
+            document.getElementById('confirmModal').classList.add('hidden');
+            resolveConfirm(false);
+        });
+
+        // Lógica para adicionar/atualizar atendente
+        document.getElementById('addAtendenteForm').addEventListener('submit', async function(event) {
+          event.preventDefault();
+          const numero = document.getElementById('numero').value.trim();
+          const nome = document.getElementById('nome').value.trim();
+          const setor = document.getElementById('setor').value;
+
+          try {
+            const response = await fetch('/api/atendentes', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ numero, nome, setor }),
+            });
+
+            const data = await response.json();
+            if (data.success) {
+              alert(data.message); // Usando alert simples por enquanto
+              window.location.reload(); // Recarrega a página para ver a atualização
+            } else {
+              alert('Erro: ' + data.message);
+            }
+          } catch (error) {
+            console.error('Erro:', error);
+            alert('Erro de conexão ao cadastrar/atualizar atendente.');
+          }
+        });
+
+        // Lógica para remover atendente
+        document.querySelectorAll('.delete-atendente-btn').forEach(button => {
+          button.addEventListener('click', async function(event) {
+            const jid = event.target.dataset.jid;
+            const confirmacao = await showConfirm(`Tem certeza que deseja remover o atendente ${jid.replace('@s.whatsapp.net', '')}?`);
+
+            if (confirmacao) {
+              try {
+                const response = await fetch(`/api/atendentes/${jid}`, {
+                  method: 'DELETE',
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                  alert(data.message); // Usando alert simples por enquanto
+                  window.location.reload(); // Recarrega a página para ver a atualização
+                } else {
+                  alert('Erro: ' + data.message);
+                }
+              } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro de conexão ao remover atendente.');
+              }
+            }
+          });
+        });
+
+        // Lógica para alternar o status do atendente (Disponível/Ocupado)
+        document.querySelectorAll('.toggle-status').forEach(toggle => {
+          toggle.addEventListener('change', async (event) => {
+            const jid = event.target.dataset.jid;
+            const isChecked = event.target.checked; // true se 'Ocupado', false se 'Disponível'
+            const statusTextSpan = document.getElementById(`status-${cleanJid(jid)}`);
+
+            try {
+              const response = await fetch(`/api/atendentes/${jid}/status`, {
+                method: 'PUT',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ ocupado: isChecked }), // Envia o booleano diretamente
+              });
+
+              const data = await response.json();
+
+              if (data.success) {
+                // Atualiza o texto na UI
+                statusTextSpan.textContent = isChecked ? 'Ocupado' : 'Disponível';
+                console.log(data.message);
+              } else {
+                // Reverte o estado do toggle no UI em caso de erro
+                event.target.checked = !isChecked; 
+                // Usando o modal de confirmação para mensagens de erro também
+                await showConfirm(`Erro ao atualizar status: ${data.message}`);
+                console.error('Erro ao atualizar status:', data.message);
+              }
+            } catch (error) {
+              // Reverte o estado do toggle no UI em caso de erro de conexão
+              event.target.checked = !isChecked; 
+              await showConfirm('Erro de conexão ao atualizar status do atendente.');
+              console.error('Erro de rede:', error);
+            }
+          });
+        });
+
+        // Função auxiliar para limpar JID para uso em IDs HTML (igual ao app.locals.cleanJid)
+        function cleanJid(jid) {
+          if (!jid) return 'N/A';
+          return jid.replace('@s.whatsapp.net', '');
+        }
+      </script>
+    </main>
+  </div>
+</body>
+</html>

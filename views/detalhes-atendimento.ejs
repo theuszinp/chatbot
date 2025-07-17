@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do Atendimento #<%= atendimento.codigo_atendimento %> - Tracker CarSat</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.12.0/toastify.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.12.0/toastify.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* bg-gray-100 */
+        }
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px; /* Espaçamento entre as mensagens */
+            padding: 16px;
+            background-color: #ffffff; /* Fundo branco para a área do chat */
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            max-height: 70vh; /* Altura máxima para a área do chat */
+            overflow-y: auto; /* Adiciona scroll se o conteúdo for muito grande */
+        }
+
+        .chat-bubble {
+            max-width: 75%; /* Ajusta o tamanho da bolha do chat */
+            padding: 10px 15px;
+            border-radius: 20px; /* Mais arredondado */
+            position: relative; /* Para posicionar o timestamp */
+            word-wrap: break-word; /* Garante que o texto longo quebre */
+            filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.05)); /* Sombra sutil para 3D */
+        }
+        .chat-client {
+            background-color: #d1fae5; /* bg-green-100 */
+            color: #10b981; /* text-green-700 */
+            align-self: flex-start; /* Alinha à esquerda */
+            border-bottom-left-radius: 5px; /* Menos arredondado na quina de origem */
+        }
+        .chat-atendente {
+            background-color: #e0e7ff; /* bg-indigo-100 */
+            color: #4338ca; /* text-indigo-700 */
+            align-self: flex-end; /* Alinha à direita */
+            border-bottom-right-radius: 5px; /* Menos arredondado na quina de origem */
+        }
+        .chat-system {
+            background-color: #fef3c7; /* bg-amber-100 */
+            color: #b45309; /* text-amber-700 */
+            align-self: center; /* Centraliza */
+            text-align: center;
+            font-style: italic;
+            font-size: 0.85rem;
+            max-width: 90%;
+            border-radius: 10px; /* Menos arredondado */
+        }
+        .chat-timestamp {
+            font-size: 0.7rem; /* Menor fonte */
+            color: #6b7280; /* text-gray-500 */
+            margin-left: 8px; /* Espaço para não grudar no texto */
+            white-space: nowrap; /* Evita que a hora quebre linha */
+            position: absolute;
+            bottom: 4px; /* Mais próximo da base */
+            right: 8px; /* Mais para a direita */
+        }
+        .chat-header {
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px; /* Espaço entre ícone e texto */
+        }
+        .chat-header.client {
+            color: #065f46; /* text-green-800 */
+        }
+        .chat-header.atendente {
+            color: #312e81; /* text-indigo-800 */
+        }
+        .icon {
+            width: 18px; /* Ícone um pouco maior */
+            height: 18px;
+            min-width: 18px; /* Garante que não encolha */
+            min-height: 18px;
+            display: inline-block;
+            vertical-align: middle;
+            color: currentColor; /* Usa a cor do texto pai */
+        }
+        .back-button {
+            @apply bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition duration-200 ease-in-out;
+        }
+        /* Estilo para o Código de Atendimento */
+        .atendimento-codigo {
+            display: inline-flex;
+            align-items: center;
+            background: #4f46e5;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .atendimento-codigo:hover {
+            background: #3b3fb8;
+        }
+        .atendimento-codigo i {
+            margin-left: 0.5rem;
+        }
+        /* Estilos para Media dentro da bolha */
+        .chat-bubble img, .chat-bubble video {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px; /* Arredondamento para mídias */
+            margin-bottom: 8px;
+        }
+        .chat-bubble audio {
+            width: 100%;
+            margin-bottom: 8px;
+        }
+        .chat-bubble a {
+            color: inherit; /* Herda a cor do texto da bolha */
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+    <!-- Header -->
+    <header class="bg-indigo-600 text-white p-4 shadow-md">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <h1 class="text-xl font-bold">Detalhes do Atendimento 
+                <span class="atendimento-codigo" onclick="copyToClipboard('<%= atendimento.codigo_atendimento %>')">
+                    <%= atendimento.codigo_atendimento %> <i class="fas fa-copy"></i>
+                </span>
+            </h1>
+            <nav>
+                <a href="/" class="text-white hover:underline text-sm ml-4">Dashboard</a>
+                <a href="/historico-atendimentos" class="text-white hover:underline text-sm ml-4">Histórico Completo</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg my-8 w-full">
+        <h2 class="text-2xl font-semibold text-gray-800 border-b-2 border-indigo-500 pb-2 mb-6">Informações do Atendimento</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-700 mb-8">
+            <div>
+                <p class="font-medium">Código:</p>
+                <p>
+                    <span class="atendimento-codigo" onclick="copyToClipboard('<%= atendimento.codigo_atendimento %>')">
+                        <%= atendimento.codigo_atendimento %> <i class="fas fa-copy"></i>
+                    </span>
+                </p>
+            </div>
+            <div>
+                <p class="font-medium">Cliente:</p>
+                <p><%= cleanJid(atendimento.jid) %></p>
+            </div>
+            <div>
+                <p class="font-medium">Nome do Cliente:</p>
+                <p><%= atendimento.nomeCliente || 'N/A' %></p>
+            </div>
+            <div>
+                <p class="font-medium">Setor:</p>
+                <p><%= setores[atendimento.setor]?.nome || 'Desconhecido' %></p>
+            </div>
+            <div>
+                <p class="font-medium">Atendente:</p>
+                <p><%= typeof nomeAtendente !== 'undefined' ? nomeAtendente : 'N/A' %> (<%= cleanJid(atendimento.atendente) || 'N/A' %>)</p>
+            </div>
+            <div>
+                <p class="font-medium">Início:</p>
+                <p><%= formatDate(atendimento.inicio) %></p>
+            </div>
+            <div>
+                <p class="font-medium">Fim:</p>
+                <p><%= atendimento.fim ? formatDate(atendimento.fim) : 'Ativo' %></p>
+            </div>
+            <div>
+                <p class="font-medium">Duração:</p>
+                <p><%= atendimento.duracao ? (atendimento.duracao / 1000 / 60).toFixed(0) + ' minutos' : 'Em andamento' %></p>
+            </div>
+        </div>
+
+        <h2 class="text-2xl font-semibold text-gray-800 border-b-2 border-indigo-500 pb-2 mb-6">Conversa e Eventos</h2>
+        
+        <div class="chat-container">
+            <% 
+            // Unir mensagens e eventos, e ordenar por timestamp
+            const timeline = [...mensagensDoAtendimento, ...eventosDoAtendimento].sort((a, b) => a.timestamp - b.timestamp);
+            
+            timeline.forEach(item => {
+                if (item.mensagem !== undefined) { // É uma mensagem (tem a propriedade 'mensagem')
+                    const isClient = item.jid === atendimento.jid;
+                    const messageClass = isClient ? 'chat-client' : 'chat-atendente';
+                    const headerClass = isClient ? 'chat-header client' : 'chat-header atendente';
+                    const senderLabel = isClient ? 'Cliente' : (typeof nomeAtendente !== 'undefined' ? nomeAtendente : cleanJid(item.jid)); // Usar nomeAtendente ou JID
+                    const formattedTime = formatChatTime(item.timestamp); // Usar formatChatTime para HH:mm
+            %>
+                    <div class="flex <%= isClient ? 'justify-start' : 'justify-end' %>">
+                        <div class="chat-bubble <%= messageClass %>">
+                            <div class="<%= headerClass %>">
+                                <% if (isClient) { %>
+                                    <!-- Ícone Cliente -->
+                                    <svg class="icon" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+                                    <%= senderLabel %>
+                                <% } else { %>
+                                    <!-- Ícone Atendente -->
+                                    <svg class="icon" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z" clip-rule="evenodd"></path></svg>
+                                    <%= senderLabel %>
+                                <% } %>
+                            </div>
+                            <% if (item.tipo_midia && item.caminho_midia) { %>
+                                <% if (item.tipo_midia === 'image') { %>
+                                    <img src="<%= item.caminho_midia %>" alt="Imagem" class="rounded-lg mb-2" onerror="this.onerror=null;this.src='https://placehold.co/200x150/e0e0e0/333333?text=Erro+ao+carregar+imagem';">
+                                <% } else if (item.tipo_midia === 'video') { %>
+                                    <video controls src="<%= item.caminho_midia %>" class="rounded-lg mb-2" onerror="this.onerror=null;this.src='';">
+                                        Seu navegador não suporta a tag de vídeo.
+                                    </video>
+                                <% } else if (item.tipo_midia === 'audio') { %>
+                                    <audio controls src="<%= item.caminho_midia %>" class="w-full mb-2" onerror="this.onerror=null;this.src='';">
+                                        Seu navegador não suporta a tag de áudio.
+                                    </audio>
+                                <% } else if (item.tipo_midia === 'document') { %>
+                                    <a href="<%= item.caminho_midia %>" target="_blank" class="flex items-center text-blue-700 hover:underline">
+                                        <svg class="icon mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0113 3.414L16.586 7A2 2 0 0117 8.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd"></path></svg>
+                                        Documento: <%= item.mensagem || 'Clique para abrir' %>
+                                    </a>
+                                <% } else { %>
+                                    <span class="text-gray-600">[MÍDIA: <%= item.tipo_midia.toUpperCase() %>]</span>
+                                <% } %>
+                                <% if (item.mensagem && item.tipo_midia !== 'document') { %>
+                                    <p class="mt-1"><%= item.mensagem %></p>
+                                <% } %>
+                            <% } else { %>
+                                <p><%= item.mensagem %></p>
+                            <% } %>
+                            <span class="chat-timestamp"><%= formattedTime %></span>
+                        </div>
+                    </div>
+            <%  } else if (item.tipo !== undefined) { // É um evento (tem a propriedade 'tipo') %>
+                    <div class="flex justify-center">
+                        <div class="chat-bubble chat-system">
+                            <span class="font-bold">EVENTO:</span> <%= item.tipo.replace(/_/g, ' ').toUpperCase() %>
+                            <% if (item.detalhes) { %>
+                                - <%= item.detalhes %>
+                            <% } %>
+                            <span class="block chat-timestamp mt-1"><%= formatDate(item.timestamp) %></span>
+                        </div>
+                    </div>
+            <%  }
+            }) %>
+            <% if (timeline.length === 0) { %>
+                <p class="text-gray-600 text-center py-4">Nenhuma mensagem ou evento neste atendimento.</p>
+            <% } %>
+        </div>
+
+        <div class="mt-8 text-center">
+            <a href="/historico-atendimentos" class="back-button">
+                <i class="fas fa-arrow-left mr-2"></i> Voltar para o Histórico de Atendimentos
+            </a>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white text-center p-4 mt-8">
+        <p>© <%= new Date().getFullYear() %> Tracker CarSat. Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                Toastify({ text: `Código ${text} copiado!`, duration: 3000, backgroundColor: '#4f46e5' }).showToast();
+            });
+        }
+
+        function cleanJid(jid) {
+            if (!jid) return 'N/A';
+            return jid.replace('@s.whatsapp.net', '');
+        }
+    </script>
+</body>
+</html>
