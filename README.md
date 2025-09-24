@@ -1,62 +1,88 @@
-🤖 Sistema de Gerenciamento de Contas e Chat Automatizado
+# 🤖 ChatBot & Sistema de Gerenciamento de Contas
 
-✨ Visão Geral do Projeto
-Este é um aplicativo desktop robusto, construído com Electron.js, JavaScript e Node.js, focado em otimizar a gestão de contas de comunicação. Ele oferece um conjunto de funcionalidades poderosas, incluindo gerenciamento de contas, respostas automáticas, um CRM básico e um chat automatizado com IA, tudo em uma interface intuitiva e personalizável.
+![GitHub repo size](https://img.shields.io/github/repo-size/theuszinp/chatbot?style=for-the-badge)
+![GitHub contributors](https://img.shields.io/github/contributors/theuszinp/chatbot?style=for-the-badge)
+![GitHub issues](https://img.shields.io/github/issues/theuszinp/chatbot?style=for-the-badge)
+![GitHub license](https://img.shields.io/github/license/theuszinp/chatbot?style=for-the-badge)
 
-🚀 Funcionalidades Principais
-Gerenciamento de Múltiplas Contas: Adicione, renomeie e remova contas facilmente. Monitore o status (ativo, inativo) e receba notificações de mensagens não lidas.
-Atalhos e Respostas Rápidas (Quick Replies): Crie, edite e envie respostas automáticas para agilizar sua comunicação.
-CRM Integrado: Mantenha seus contatos organizados. O sistema permite visualizar, importar e exportar contatos, com integração direta para coleta de contatos do WhatsApp.
-Chat Automatizado com IA: Envie e receba mensagens de forma interativa. A interface de chat exibe mensagens da IA com um avatar personalizado e inclui suporte para alertas e mensagens de erro.
-Interface Otimizada: Desfrute de uma experiência de usuário aprimorada com modais dinâmicos, Drag & Drop para reorganizar abas e suporte para temas claro e escuro.
+✨ **Visão Geral**  
+Este é um **aplicativo desktop robusto**, construído com **Electron.js, JavaScript e Node.js**, que otimiza a gestão de contas de comunicação. Ele oferece:
 
-🛠️ Tecnologias Utilizadas
-Categoria	Tecnologias
-Frontend	HTML5, CSS3, JavaScript, Electron.js
-Backend	Node.js, IPC do Electron
-Banco de Dados	SQLite (armazenamento local)
-Extras	Sortable.js, integração com APIs do WhatsApp
+- Gerenciamento de contas  
+- Respostas automáticas (Quick Replies)  
+- CRM básico  
+- Chat automatizado com IA  
 
-Exportar para as Planilhas
-⚙️ Como Executar
-Certifique-se de ter o Node.js e o npm instalados em sua máquina.
+Tudo em uma interface **intuitiva, personalizável e moderna**.
 
-Clone o repositório:
+![Demo GIF](https://media.giphy.com/media/3o7TKtnuHOHHUjR38Y/giphy.gif)  
+*Exemplo de interação com o ChatBot e gerenciamento de contas*
 
-Bash
+---
 
+## 🚀 Funcionalidades Principais
+
+### 💼 Gerenciamento de Múltiplas Contas
+- Adicione, renomeie e remova contas facilmente
+- Monitore status (ativo/inativo)
+- Notificações de mensagens não lidas
+
+### ⚡ Respostas Rápidas (Quick Replies)
+- Crie, edite e envie respostas automáticas para agilizar a comunicação
+
+### 📇 CRM Integrado
+- Visualize e organize contatos
+- Importe/exporte contatos facilmente
+- Integração com WhatsApp
+
+### 🤖 Chat Automatizado com IA
+- Envio e recebimento de mensagens de forma interativa
+- Avatar personalizado para IA
+- Alertas e mensagens de erro
+
+### 🎨 Interface Otimizada
+- Modais dinâmicos
+- Drag & Drop para reorganização de abas
+- Tema claro e escuro
+
+---
+
+## 🛠️ Tecnologias Utilizadas
+
+| Categoria | Tecnologias |
+|-----------|------------|
+| Frontend  | HTML5, CSS3, JavaScript, Electron.js |
+| Backend   | Node.js, IPC do Electron |
+| Banco de Dados | SQLite (armazenamento local) |
+| Extras    | Sortable.js, APIs do WhatsApp |
+
+![Electron](https://img.shields.io/badge/Electron.js-20232A?style=for-the-badge&logo=electron&logoColor=61DAFB)
+![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white)
+![SQLite](https://img.shields.io/badge/SQLite-07405E?style=for-the-badge&logo=sqlite&logoColor=white)
+
+---
+
+## ⚙️ Como Executar
+
+```bash
+# Clone o repositório
 git clone https://github.com/theuszinp/chatbot.git
 cd chatbot
-Instale as dependências:
 
-Bash
-
+# Instale dependências
 npm install
-Inicie a aplicação:
 
-Bash
 
-npm start
-📂 Estrutura do Projeto
+
+
 /project-root
-├─ main.js             # Lógica principal do Electron
-├─ renderer.js         # Lógica da interface (frontend)
-├─ index.html          # Estrutura principal da aplicação
-├─ style.css           # Estilos da interface
-├─ /icons              # Ícones utilizados
-└─ /data               # Armazenamento de contatos e quick replies
-🧠 Aprendizados e Habilidades Desenvolvidas
-Gerenciamento de Modais e Eventos: Criação de modais dinâmicos e sistemas de eventos complexos.
+├─ main.js        # Lógica principal do Electron
+├─ renderer.js    # Lógica da interface
+├─ index.html     # Estrutura principal
+├─ style.css      # Estilos da interface
+├─ /icons         # Ícones utilizados
+└─ /data          # Armazenamento de contatos e quick replies
 
-Comunicação entre Processos (IPC): Experiência prática com a comunicação do Electron para sincronizar o frontend e o backend.
 
-Automação e Integração: Automação de processos e integração com serviços externos via APIs.
-
-➡️ Próximos Passos (Roadmap)
-[ ] Implementar suporte para múltiplos usuários simultâneos.
-[ ] Melhorar a importação e exportação de contatos para suportar CSV e Excel.
-[ ] Integrar com modelos de IA mais avançados para respostas personalizadas.
-
-[ ] Aprimorar a UI/UX para uma experiência ainda mais intuitiva.
-
-<p align="center">Feito com ❤️ por theuszinp</p>
+# Inicie a aplicação
+npm start
