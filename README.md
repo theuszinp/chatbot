@@ -86,3 +86,33 @@ npm install
 
 # Inicie a aplicação
 npm start
+
+
+📂 Estrutura do Projeto
+/project-root
+├─ main.js        # Lógica principal do Electron
+├─ renderer.js    # Lógica da interface
+├─ index.html     # Estrutura principal
+├─ style.css      # Estilos da interface
+├─ /icons         # Ícones utilizados
+└─ /data          # Armazenamento de contatos e quick replies
+
+🧠 Aprendizados e Habilidades Desenvolvidas
+
+Gerenciamento de Modais e Eventos: Criação de modais dinâmicos e sistemas de eventos complexos
+
+Comunicação entre Processos (IPC): Integração frontend-backend com Electron
+
+Automação e Integração: Automação de processos e integração com APIs externas
+
+➡️ Roadmap / Próximos Passos
+
+ Suporte para múltiplos usuários simultâneos
+
+ Importação/exportação de contatos em CSV/Excel
+
+ Integração com IA avançada para respostas personalizadas
+
+ Aprimorar UI/UX para experiência mais intuitiva
+
+❤️ Feito com ❤️ por theuszinp
