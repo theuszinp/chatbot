@@ -48,7 +48,7 @@ Frontend / Interface: HTML5, CSS3, JavaScript, Electron.js
 
 Backend / Automação: Node.js, IPC do Electron
 
-Banco de Dados / Armazenamento: JSON local (para contatos e atalhos)
+Banco de Dados / Armazenamento: JSON local (para contatos e atalhos) Inicialmente, depois implantei o sql lite pra salvar os dados
 
 Extras: Sortable.js (drag & drop das abas), integração com APIs do WhatsApp
 
