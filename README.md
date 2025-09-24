@@ -1,103 +1,72 @@
 🤖 Sistema de Gerenciamento de Contas e Chat Automatizado
+🚀 Visão Geral do Projeto
+Este é um aplicativo desktop robusto, desenvolvido com Electron.js, JavaScript e Node.js, projetado para otimizar a gestão de contas de comunicação. Ele oferece um conjunto de funcionalidades poderosas, incluindo gerenciamento de múltiplas contas, respostas automáticas, um CRM básico e um chat automatizado com inteligência artificial, tudo em uma interface intuitiva e personalizável.
 
-Um aplicativo desktop desenvolvido com Electron.js, JavaScript e Node.js para gerenciar múltiplas contas, respostas automáticas, atalhos de mensagens e contatos. Inclui CRM básico, integração com WhatsApp e chat automatizado com IA.
+✨ Principais Funcionalidades
+Gerenciamento de Contas Multiplas: Adicione, renomeie e remova contas facilmente. Monitore o status (ativo, inativo, carregado) e receba notificações de mensagens não lidas.
 
-🔹 Funcionalidades
+Atalhos e Respostas Rápidas (Quick Replies): Acelere sua comunicação com atalhos de mensagens personalizáveis. Crie, edite e envie respostas automáticas para agilizar o atendimento.
 
-Gerenciamento de Contas
+CRM Integrado: Mantenha seus contatos organizados. O sistema permite visualizar, adicionar, importar e exportar contatos, com integração direta para coleta de contatos do WhatsApp.
 
-Adicionar, renomear, remover e alternar entre contas
+Chat Automatizado com IA: Envie e receba mensagens de forma interativa. A interface de chat exibe mensagens da IA com um avatar personalizado e inclui suporte para alertas e mensagens de erro.
 
-Monitoramento do status de cada conta (ativo, inativo, carregado, não carregado)
+Interface Otimizada: Desfrute de uma experiência de usuário aprimorada com modais dinâmicos, funcionalidade de Drag & Drop para reorganizar abas de contas e suporte para temas claro e escuro.
 
-Notificações de mensagens não lidas por conta
+🛠️ Tecnologias Utilizadas
+Frontend: HTML5, CSS3, JavaScript e Electron.js.
 
-Atalhos e Respostas Rápidas (Quick Replies)
+Backend e Automação: Node.js, com comunicação via IPC do Electron.
 
-Criar, editar e remover atalhos de mensagens
+Armazenamento de Dados: Inicialmente, os dados eram armazenados em arquivos JSON locais, e o projeto foi aprimorado para usar SQLite para um armazenamento mais eficiente e confiável.
 
-Envio automático de respostas
+Extras: Sortable.js para o recurso de arrastar e soltar e integração com APIs externas do WhatsApp.
 
-CRM e Contatos
+⚙️ Como Executar o Projeto
+Certifique-se de ter o Node.js e o npm instalados em sua máquina.
 
-Visualizar, adicionar, importar e exportar contatos
+Clone o repositório:
 
-Integração com WhatsApp para coleta de contatos
+Bash
 
-Exportação de contatos para arquivos externos
-
-Chat Automatizado com IA
-
-Envio e recebimento de mensagens com interface interativa
-
-Mensagens da IA exibidas com avatar personalizado
-
-Suporte a mensagens de erro e alertas
-
-Interface e Usabilidade
-
-Modais dinâmicos para contas, contatos, quick replies e CRM
-
-Drag & Drop para reorganização das abas de contas
-
-Suporte a tema claro e escuro
-
-🔹 Tecnologias Utilizadas
-
-Frontend / Interface: HTML5, CSS3, JavaScript, Electron.js
-
-Backend / Automação: Node.js, IPC do Electron
-
-Banco de Dados / Armazenamento: JSON local (para contatos e atalhos) Inicialmente, depois implantei o sql lite pra salvar os dados
-
-Extras: Sortable.js (drag & drop das abas), integração com APIs do WhatsApp
-
-🔹 Como Executar
-
-Clone este repositório:
-
-git clone https://github.com/seu-usuario/nome-do-projeto.git
-
-
+git clone https://github.com/theuszinp/chatbot.git
+cd chatbot
 Instale as dependências:
 
+Bash
+
 npm install
+Inicie a aplicação:
 
-
-Execute a aplicação:
+Bash
 
 npm start
-
-
-⚠️ Certifique-se de ter Node.js e Electron instalados no seu sistema.
-
-🔹 Estrutura do Projeto
+📂 Estrutura do Projeto
 /project-root
-├─ main.js           # Código principal do Electron
-├─ renderer.js       # Código da interface e lógica do frontend
-├─ index.html        # Layout principal da aplicação
-├─ style.css         # Estilos da interface
-├─ /icons            # Ícones usados na aplicação
-└─ /data             # Armazenamento de contatos e quick replies
+├─ main.js             # Código principal para a lógica do Electron
+├─ renderer.js         # Lógica da interface e do frontend
+├─ index.html          # Estrutura principal da aplicação
+├─ style.css           # Estilos da interface
+├─ /icons              # Ícones utilizados
+└─ /data               # Armazenamento local de contatos e quick replies
+🧠 Aprendizados e Habilidades Desenvolvidas
+Gerenciamento de Eventos e Modais: Criação de modais dinâmicos e sistemas de eventos complexos.
 
-🔹 Aprendizados e Habilidades
+Arquitetura Modular: Desenvolvimento de um sistema com módulos reutilizáveis e de fácil manutenção.
 
-Estruturação de modais dinâmicos e gerenciamento de eventos complexos
+Comunicação entre Processos: Experiência prática com a comunicação IPC (Inter-Process Communication) do Electron para sincronizar o frontend e o backend.
 
-Criação de sistemas modulares e reutilizáveis
+Desenvolvimento Desktop: Criação de interfaces responsivas e otimizadas para aplicações desktop.
 
-Experiência prática com IPC no Electron para comunicação entre frontend e backend
+Automação e Integração: Automação de processos e integração com serviços externos via APIs.
 
-Desenvolvimento de interface responsiva para desktop
+➡️ Próximos Passos (Roadmap)
+[ ] Implementar suporte para múltiplos usuários simultâneos.
 
-Automação de processos e integração com serviços externos
+[ ] Melhorar a importação e exportação de contatos para suportar formatos como CSV e Excel.
 
-🔹 Próximos Passos
+[ ] Integrar com modelos de IA mais avançados para respostas ainda mais personalizadas.
 
-Suporte a múltiplos usuários simultâneos
+[ ] Aprimorar a UI/UX para uma experiência ainda mais intuitiva e agradável.
 
-Melhorar exportação/importação de contatos com formatos CSV/Excel
-
-Integração com IA mais avançada para respostas personalizadas
-
-Aprimorar UI/UX para experiência mais intuitiva
+<p align="center">Feito com ❤️ por theuszinp</p>
